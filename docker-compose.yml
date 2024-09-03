@@ -1,0 +1,96 @@
+services:
+   task-api:
+      restart: always
+      build:
+         context: ./task_manager
+         dockerfile: Dockerfile
+      container_name: task_manager_api
+      volumes:
+         # don't overwrite this folder in container with the local one
+         - /app/node_modules
+         # map current local directory to the /app inside the container
+         # This is a must for development in order to update our container whenever a change to the source code is made.
+         # Without this, you would have to rebuild the image each time you make a change to source code.
+         - ./task_manager:/app
+      ports:
+         - 3000:3000
+      expose:
+         - 3000
+      depends_on:
+         - mongodb
+         # - mongo-seed
+      env_file: 
+         - .env
+      environment:
+         MONGO_URI: ${MONGO_URI}
+      networks:
+         - mongo-connect
+
+
+   client: 
+      restart: always
+      build:
+         context: ./front-end
+         dockerfile: Dockerfile
+      container_name: task_mern_frontend
+      volumes:
+         - /app/node_modules
+         - ./front-end:/app
+      ports:
+         - 5000:5000
+      expose:
+         - 5000
+      depends_on:
+         - task-api
+      networks:
+         - mongo-connect
+
+
+   mongodb:
+      image: mongo
+      restart: always
+      ports:
+         - 27017:27017
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      volumes:
+         # for persistence storage
+         - mongodb-data:/data/db
+      networks:
+         - mongo-connect
+
+   # mongo-seed:
+   #    build: 
+   #       context: ./mongo-seed
+   #       dockerfile: Dockerfile
+   #    environment:
+   #       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+   #       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+   #    # volumes:
+   #    #    # for persistence storage
+   #    #    - mongodb-data:/data/db
+   #    depends_on:
+   #       - mongodb
+   #    networks:
+   #       - mongo-connect
+
+      
+   nginx:
+      restart: always
+      depends_on:
+         - task-api
+         - client
+      build:
+         context: ./nginx
+         dockerfile: Dockerfile
+      ports:
+         - 80:80
+      networks:
+         - mongo-connect
+networks:
+   mongo-connect:
+      driver: bridge
+
+volumes:
+   mongodb-data:
