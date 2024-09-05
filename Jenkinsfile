@@ -9,12 +9,19 @@ pipeline {
                 sh(script: """ ls -la """,label: "first stage")
             }
         }
-        stage("Deploy"){
-            steps {
-                echo "Deploying the container"
-                sh "docker-compose up -d"
+        stage("Copy file .env to workspace"){
+            steps{
+                withCredentials([file(credentialsId: '.env', variable: 'mySecretEnvFile')]){
+                sh 'cp $mySecretEnvFile $WORKSPACE'
+            }
             }
         }
+        // stage("Deploy"){
+        //     steps {
+        //         echo "Deploying the container"
+        //         sh "docker-compose up -d"
+        //     }
+        // }
     }
 }
 
