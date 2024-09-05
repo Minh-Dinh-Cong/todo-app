@@ -18,12 +18,8 @@ pipeline {
         }
         stage("Deploy"){
             steps {
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                 echo "Deploying the container"
-                sh "docker login -u ${dockerHubUser} -p ${dockerHubPass}"
                 sh "docker-compose up -d"
-                }
-                
             }
         }
     }
