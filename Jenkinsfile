@@ -19,7 +19,7 @@ pipeline {
         stage("Deploy"){
             steps {
                 echo "Deploying the container"
-                sh "docker-compose up -d --env mySecretEnvFile"
+                sh "docker-compose up -d"
             }
         }
     }
