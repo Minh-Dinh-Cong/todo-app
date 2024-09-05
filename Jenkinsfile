@@ -12,7 +12,7 @@ pipeline {
         stage("Copy file .env to workspace"){
             steps{
                 withCredentials([file(credentialsId: '.env', variable: 'mySecretEnvFile')]){
-                sh 'cp $mySecretEnvFile $WORKSPACE'
+                sh 'cat $mySecretEnvFile'
               }
             }
         }
