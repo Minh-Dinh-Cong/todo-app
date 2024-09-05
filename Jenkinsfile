@@ -9,7 +9,7 @@ pipeline {
                 sh(script: """ ls -la """,label: "first stage")
             }
         }
-        stage("Copy file .env to workspace"){
+        stage("Check file .env to workspace"){
             steps{
                 withCredentials([file(credentialsId: '.env', variable: 'mySecretEnvFile')]){
                 sh 'cat $mySecretEnvFile'
