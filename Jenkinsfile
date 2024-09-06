@@ -21,7 +21,10 @@ pipeline {
                 echo "Deploying the container"
                 // sh "docker-compose up -d"
                 sh "docker-compose version"
-                sh """ cd task_manager, ls -la """
+                dir('task_manager') {
+                    // Check Docker Compose version
+                    sh "ls -la"
+                }
                 // sh "docker-compose down"
             }
         }
