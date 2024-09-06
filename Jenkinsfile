@@ -20,12 +20,12 @@ pipeline {
             steps {
                 echo "Deploying the container"
                 sh "docker-compose version"
-                sh "docker-compose down && docker-compose up -d"
+                // sh "docker-compose down && docker-compose up -d"
                 // dir('task_manager') {
                 //     // Check Docker Compose version
                 //     sh "ls -la"
                 // }
-                // sh "docker-compose down"
+                sh "docker-compose down"
             }
         }
     }
