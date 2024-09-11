@@ -36,7 +36,6 @@ pipeline {
                     && docker tag ${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
                     && docker tag ${NAME_MONGO}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
                     && docker tag ${NAME_NGINX}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
-                    
                     && echo $DOCKER_CREDENTIALS_PSW || docker login -u $DOCKER_CREDENTIALS_USR --password-stdin \
                     && docker push ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
                     && docker push ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
