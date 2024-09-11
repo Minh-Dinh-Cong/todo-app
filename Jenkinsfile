@@ -5,7 +5,7 @@ pipeline {
     environment{
         DOCKER_HUB = 'minhdinh04'
         DOCKER_CREDENTIALS= credentials('dockerHub')
-        NAME_BACKEND = "todo-app_task-api "
+        NAME_BACKEND = "todo-app_task-api"
         NAME_FRONTEND= "todo-app_client"
         NAME_NGINX = "todo-app_nginx"
         NAME_MONGO = "mongo"
@@ -34,9 +34,10 @@ pipeline {
                     && docker-compose build \
                     && docker tag ${NAME_BACKEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
                     && docker tag ${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
-                    && docker tag ${NAME_NGINX}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
                     && docker tag ${NAME_MONGO}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
-                    && echo $DOCKER_CREDENTIALS_PSW || docker login -u $DOCKER_CREDENTIALS_USR --password -stdin \
+                    && docker tag ${NAME_NGINX}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
+                    
+                    && echo $DOCKER_CREDENTIALS_PSW || docker login -u $DOCKER_CREDENTIALS_USR --password-stdin \
                     && docker push ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
                     && docker push ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
                     && docker push ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
