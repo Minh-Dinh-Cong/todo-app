@@ -9,7 +9,7 @@ pipeline {
         NAME_FRONTEND= "todo-app_client"
         NAME_NGINX = "todo-app_nginx"
         NAME_MONGO = "mongo"
-        DOCKER_TAG = "${GIT_BRANCH.tokensize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
+        DOCKER_TAG = "${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
     }
     stages {
         stage('Info') {
