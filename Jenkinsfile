@@ -28,10 +28,11 @@ pipeline {
         stage("Build and Push to Docker Hub"){
             steps{
                 script{
+                    env.IMAGE_TAG= DOCKER_TAG
                     withCredentials([usernamePassword(credentialsId: 'dockerHub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh "docker-compose down -v"
                     // sh "echo $DOCKER_PASS || docker login -u $DOCKER_USER --password-stdin"
-                    sh "IMAGE_TAG=${DOCKER_TAG} \
+                    sh "IMAGE_TAG=${IMAGE_TAG} \
                     && docker-compose build \
                     && docker tag ${NAME_BACKEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
                     && docker tag ${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
