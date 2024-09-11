@@ -29,6 +29,7 @@ pipeline {
             steps{
                 script{
                     env.IMAGE_TAG = DOCKER_TAG
+                    sh "docker-compose down -v"
                     sh "IMAGE_TAG=${IMAGE_TAG} \
                     && docker-compose build \
                     && docker tag ${NAME_BACKEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
@@ -39,8 +40,7 @@ pipeline {
                     && docker push ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
                     && docker push ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
                     && docker push ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
-                    && docker push ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
-                    "
+                    && docker push ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG}"
                 }
             }
         }
