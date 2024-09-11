@@ -4,6 +4,8 @@ services:
       build:
          context: ./task_manager
          dockerfile: Dockerfile
+         args:
+           IMAGE_TAG: ${IMAGE_TAG:-1.0.0}
       container_name: task_manager_api
       volumes:
          # don't overwrite this folder in container with the local one
@@ -20,6 +22,7 @@ services:
          - .env
       environment:
          MONGO_URI: ${MONGO_URI}
+         IMAGE_TAG: ${IMAGE_TAG:-1.0.0}
       networks:
          - mongo-connect
 
@@ -29,6 +32,8 @@ services:
       build:
          context: ./front-end
          dockerfile: Dockerfile
+         args:
+           IMAGE_TAG: ${IMAGE_TAG:-1.0.0}
       container_name: task_mern_frontend
       volumes:
          - /app/node_modules
@@ -39,6 +44,8 @@ services:
          - 5000
       depends_on:
          - task-api
+      environment:
+        - IMAGE_TAG= ${IMAGE_TAG:-1.0.0}
       networks:
          - mongo-connect
 
@@ -81,8 +88,12 @@ services:
       build:
          context: ./nginx
          dockerfile: Dockerfile
+         args:
+           IMAGE_TAG: ${IMAGE_TAG:-1.0.0}
       ports:
          - 80:80
+      environment:
+        - IMAGE_TAG= ${IMAGE_TAG:-1.0.0}
       networks:
          - mongo-connect
 networks:
