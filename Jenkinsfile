@@ -32,7 +32,7 @@ pipeline {
                     sh "IMAGE_TAG=${IMAGE_TAG} \
                     && docker-compose build \
                     && docker tag ${NAME_BACKEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
-                    && docker tag ${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEN}:${DOCKER_TAG} \
+                    && docker tag ${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
                     && docker tag ${NAME_NGINX}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
                     && docker tag ${NAME_MONGO}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
                     && echo $DOCKER_CREDENTIALS_PSW || docker login -u $DOCKER_CREDENTIALS_USR --password -stdin \
@@ -60,7 +60,7 @@ pipeline {
         //             && docker pull ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
         //             && docker pull ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
         //             && docker run --name=${NAME_BACKEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
-        //             && docker run --name=${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEN}:${DOCKER_TAG} \
+        //             && docker run --name=${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
         //             && docker run --name=${NAME_NGINX}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
         //             && docker run --name=${NAME_MONGO}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
         //             "
