@@ -1,0 +1,61 @@
+services:
+   task-api:
+      image: minhdinh04/todo-app_task-api:${IMAGE_TAG}
+      restart: always
+      ports:
+         - 3000:3000
+      expose:
+         - 3000
+      depends_on:
+         - mongodb
+         # - mongo-seed
+      environment:
+         IMAGE_TAG: ${IMAGE_TAG:-1.0.0}
+      networks:
+         - mongo-connect
+
+   client: 
+      image: minhdinh04/todo-app_client:${IMAGE_TAG}
+      restart: always
+      ports:
+         - 5000:5000
+      expose:
+         - 5000
+      depends_on:
+         - task-api
+      environment:
+        - IMAGE_TAG= ${IMAGE_TAG:-1.0.0}
+      networks:
+         - mongo-connect
+
+
+   mongodb:
+      image: mongo
+      restart: always
+      ports:
+         - 27017:27017
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      volumes:
+         # for persistence storage
+         - mongodb-data:/data/db
+      networks:
+         - mongo-connect
+    
+   nginx:
+      image: minhdinh04/todo-app_nginx:${IMAGE_TAG}
+      restart: always
+      depends_on:
+         - task-api
+         - client
+      ports:
+         - 80:80
+      environment:
+        - IMAGE_TAG= ${IMAGE_TAG:-1.0.0}
+networks:
+   mongo-connect:
+      driver: bridge
+
+volumes:
+   mongodb-data:
