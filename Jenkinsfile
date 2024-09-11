@@ -29,18 +29,20 @@ pipeline {
             steps{
                 script{
                     env.IMAGE_TAG = DOCKER_TAG
+                    withCredentials([usernamePassword(credentialsId: 'dockerHub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh "docker-compose down -v"
                     sh "IMAGE_TAG=${IMAGE_TAG} \
                     && docker-compose build \
                     && docker tag ${NAME_BACKEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
                     && docker tag ${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
-                    && docker tag ${NAME_MONGO}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
+                    && docker tag ${NAME_MONGO}:latest ${DOCKER_HUB}/${NAME_MONGO}:latest \
                     && docker tag ${NAME_NGINX}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
-                    && echo $DOCKER_CREDENTIALS_PSW || docker login -u $DOCKER_CREDENTIALS_USR --password-stdin \
+                    && echo $DOCKER_PASS || docker login -u $DOCKER_USER --password-stdin \
                     && docker push ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
                     && docker push ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
                     && docker push ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
                     && docker push ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG}"
+                    }
                 }
             }
         }
@@ -58,11 +60,11 @@ pipeline {
         //             && docker pull ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
         //             && docker pull ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
         //             && docker pull ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
-        //             && docker pull ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
+        //             && docker pull ${DOCKER_HUB}/${NAME_MONGO}:latest \
         //             && docker run --name=${NAME_BACKEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_BACKEND}:${DOCKER_TAG} \
         //             && docker run --name=${NAME_FRONTEND}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_FRONTEND}:${DOCKER_TAG} \
         //             && docker run --name=${NAME_NGINX}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_NGINX}:${DOCKER_TAG} \
-        //             && docker run --name=${NAME_MONGO}:${DOCKER_TAG} ${DOCKER_HUB}/${NAME_MONGO}:${DOCKER_TAG} \
+        //             && docker run --name=${NAME_MONGO}:latest ${DOCKER_HUB}/${NAME_MONGO}:latest \
         //             "
         //     }
         // }

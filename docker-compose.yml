@@ -7,6 +7,7 @@ services:
          args:
            IMAGE_TAG: ${IMAGE_TAG:-1.0.0}
       container_name: task_manager_api
+      image: todo-app_task-api:${IMAGE_TAG}
       volumes:
          # don't overwrite this folder in container with the local one
          - /app/node_modules
@@ -35,6 +36,7 @@ services:
          args:
            IMAGE_TAG: ${IMAGE_TAG:-1.0.0}
       container_name: task_mern_frontend
+      image: todo-app_client:${IMAGE_TAG}
       volumes:
          - /app/node_modules
          - ./front-end:/app
@@ -90,6 +92,7 @@ services:
          dockerfile: Dockerfile
          args:
            IMAGE_TAG: ${IMAGE_TAG:-1.0.0}
+      image: todo-app_nginx:${IMAGE_TAG}
       ports:
          - 80:80
       environment:
